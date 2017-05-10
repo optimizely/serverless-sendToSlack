@@ -1,0 +1,5 @@
+# Serverless work dir
+.serverless
+
+# Vendored (don't track binaries)
+vendored/
