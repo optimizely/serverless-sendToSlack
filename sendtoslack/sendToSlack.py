@@ -35,6 +35,8 @@ HOOK_URL = env('SLACK_HOOK_URL')
 
 logger = logging.getLogger()
 logger.setLevel(logging.DEBUG)
+
+# JSON doesn't have a python-compatible datetime object, so we need to ensure that we can parse dates without errors.
 json.JSONEncoder.default = lambda self, obj: (obj.isoformat() if isinstance(obj, datetime.datetime) else None)
 
 def lambda_handler(event, context):
