@@ -1,0 +1,25 @@
+service: sendToSlack
+
+custom:
+  stage: "${opt:stage, self:provider.stage}"
+  prefix: "${opt:prefix, self:provider.prefix}"
+provider:
+  name: aws
+  runtime: python2.7
+  region: us-west-2
+  environment: ${file(env.yml):${self:custom.stage}}
+  deploymentBucket: ${self:custom.prefix}-serverless-${self:custom.stage}
+
+package:
+  include:
+    - sendToSlack.py
+    - vendored
+
+functions:
+  main:
+    handler: sendToSlack.lambda_handler
+    timeout: 300
+    events:
+      - sns:
+          topicName: sendToSlack
+          displayName: Messages to send to a Slack channel
